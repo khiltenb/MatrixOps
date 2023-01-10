@@ -1,0 +1,6 @@
+Hello! This is a repo designed to create a cpp library of matrix operations that should help others understand how different matrix operations work as well as helping me in the process. Please be patient, as this is my first attempt at building a library.
+
+
+Log 1:
+Starting this project off will be a simple system allowing for the addition and subtraction of matrices, hopefully with infrastructure set such that other matrix operations can be completed with it in the future, including, but not limited to a function that counts the flops (floating point operations) for a given operation (eventually, it would be fun to see if a form of pseudo-code could be fed into a function to see what the general flop count would be, but that's a pie in the sky idea for the time being). Pre-defined sets of matrices of various sizes and values will be set up in the MatrixDriver.cc file, where most testing of this "library" will be conducted.
+In the MatrixOps.h file, a class will be defined containing datamembers for individual matrices and the information required to complete useful actions with them like addition/subtraction for now and multiplication (among other things later).
