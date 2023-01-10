@@ -8,13 +8,14 @@ class Matrix
 	int * data;		// Matrix Data
 
 	Matrix();
-	Matrix(int rows, int colums, int * numbs);
+	Matrix(int rows, int columns, int * numbs);
 	bool changeDims(int rows, int columns);
 	bool changeVals(int * numbs);
 	bool changeMatrix(int rows, int columns, int * numbs);
 	bool ConformCheck(Matrix& rval);
 	bool Mcheck(Matrix& rval);
 	Matrix operator=(Matrix& rval);
+	bool operator==(Matrix& rval);
 	Matrix operator+(Matrix& rval);
 	Matrix operator-(Matrix& rval);
 };
