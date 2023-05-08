@@ -3,8 +3,8 @@
 #
 #
 
-MatrixOps:	MatrixDriver.cc MatrixOps.cc 
-	g++ -o MatrixOps MatrixDriver.cc MatrixOps.cc MatrixOps.h
+MatrixOps:	MatrixOps.cc MatrixOps.h MatrixDriver.cc 
+	g++ -std=c++11 -Wall -Wextra -pedantic -o MatrixOps MatrixDriver.cc MatrixOps.cc
 
 clean:
 	rm -f MatrixOps
