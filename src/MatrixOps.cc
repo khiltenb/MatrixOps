@@ -44,7 +44,6 @@
 	 */
 	Matrix::Matrix(std::string fileName)
 	{
-		std::cout << "test1" << std::endl;
 		//	variables for looping/parsing through input
 		int fd;
 		int start = 0;
@@ -65,23 +64,16 @@
 			data = nullptr;
 			return;
 		}
-		std::cout << "test01" << std::endl;
 		
 		// get num of rows
 		bytesRead = read(fd, buf, 4096);
-		std::cout << "bytes read from file: " << bytesRead << std::endl;
 		end = findPos(' ', buf, end, bytesRead);
-		std::cout << "test02 " << end << std::endl;
 		char * tempBuf = new char[end - start];
-		std::cout << "test03" << std::endl;
 		memcpy(tempBuf, &buf[start], end - start);
-		std::cout << "test04" << std::endl;
 		nR = std::stof(tempBuf);
 		delete[] tempBuf;
-		std::cout << "test05" << std::endl;
 		start = end;
 		end++;
-		std::cout << "test06" << std::endl;
 
 
 		// get num of columns
@@ -92,16 +84,12 @@
 		delete[] tempBuf;
 		start = end;
 		end++;
-		std::cout << "test3" << std::endl;
 
 		data = new double[nR * nC];
-		std::cout << "size of Matrix: " << nR << " x " << nC << " for a total of " << nR * nC << " elements." << std::endl;
-		int sizeTracker = 0;
 
 		// loop through input and set up data member
 		while (bytesRead == 4096 || loop)
 		{
-			std::cout << "test loop1" << std::endl;
 			if (loop == true)
 			{
 				loop = false;
@@ -109,43 +97,29 @@
 			int endOfLine = 0;
 			while ((endOfLine = findPos('\n', buf, end, bytesRead)) != -1 && row <= nR)
 			{
-				std::cout << "test loop2" << std::endl;
 				end = findPos(' ', buf, end, bytesRead);
 				while (col < nC  && row < nR && end < endOfLine)
 				{
-					std::cout << "test loop3" << std::endl;
-					std::cout << "col: " << col << std::endl << "row: " << row << std::endl;
 					tempBuf = new char[end - start];
 					memcpy(tempBuf, &buf[start], end - start);
-					std::cout << tempBuf << std::endl;
 					data[row * nC + col] = std::stof(tempBuf);
-					sizeTracker++;
 					delete[] tempBuf;
 					col++;
-					std::cout << "Size of Matrix: " << sizeTracker << ". Matrix element " << row << " " << col-1 << " is " << data[sizeTracker -1] << std::endl;
 					start = end + 1;
 					end = findPos(' ', buf, start, bytesRead);
 				}
 
 				if (end > endOfLine)
 				{
-					std::cout << "test loop4" << std::endl;
 					tempBuf = new char[end - endOfLine];
 					memcpy(tempBuf, &buf[start], end - endOfLine);
-					std::cout << tempBuf << std::endl;
 					data[row * nC + col] = std::stof(tempBuf);
-					sizeTracker++;
 					delete[] tempBuf;
 					col++;
-					std::cout << "Size of Matrix: " << sizeTracker << ". Matrix element " << row << " " << col-1 << " is " << data[sizeTracker -1] << std::endl;
-					std::cout << "End of Line detected. Filling rest of row with zeros" << std::endl;
 					for (int i = col; i < nC; ++i)
 					{
 						data[row * nC + i] = 0.0;
-						sizeTracker++;
-						std::cout << "Size of Matrix: " << sizeTracker << ". Matrix element " << row << " " << col-1 << " is " << data[sizeTracker -1] << std::endl;
 					}
-					std::cout << "Zeroes filled." << std::endl;
 					start = endOfLine;
 					col = 0;
 					row++;
@@ -161,8 +135,6 @@
 
 			if (endOfLine == -1)
 			{
-				std::cout << "Edge case detected. Backfilling now." << std::endl;
-				std::cout << "Last end of line character: " << tempChecker << std::endl;
 				start = 0;
 				int endOfBufferSz = bytesRead - tempChecker;
 				end = 0;
@@ -173,19 +145,14 @@
 				if (bytesRead != 0)
 				{
 					endOfLine = findPos('\n', buf, 0, bytesRead);
-					// reimplement the previous with the edge case
 					end = findPos(' ', tempBuf2, end, bytesRead);
 					while (col < nC && end != -1)
 					{
-						std::cout << "EC loop 1" << std::endl;
-						std::cout << end << std::endl;
 						tempBuf = new char[end - start];
 						memcpy(tempBuf, &tempBuf2[start], end - start);
 						data[row * nR + col] = std::stof(tempBuf2);
 						delete[] tempBuf;
 						col++;
-						sizeTracker++;
-						std::cout << "Size of Matrix: " << sizeTracker << ". Matrix element " << row << " " << col-1 << " is " << data[sizeTracker -1] << std::endl;
 						start = end + 1;
 						end = findPos(' ', tempBuf2, end, bytesRead);
 					}
@@ -196,38 +163,28 @@
 					memcpy(&tempBuf[0], &buf[0], end);
 					data[nC * row + col] = std::stof(tempBuf);
 					delete[] tempBuf;
-					sizeTracker++;
-					std::cout << "Size of Matrix: " << sizeTracker << ". Matrix element " << row << " " << col-1 << " is " << data[sizeTracker -1] << std::endl;
 					col++;
 					start = end;
 
 					//
 					while (col < nC && end < endOfLine)
 					{
-						std::cout << "EC loop 2" << std::endl;
 						tempBuf = new char[end - start];
 						memcpy(tempBuf, &buf[start], end - start);
 						data[row * nC + col] = std::stof(tempBuf2);
 						delete[] tempBuf;
-						sizeTracker++;
 						col++;
-						std::cout << "Size of Matrix: " << sizeTracker << ". Matrix element " << row << " " << col-1 << " is " << data[sizeTracker -1] << std::endl;
 						start = end;
 						end = findPos(' ', buf, end, bytesRead);
 					}
 
 					if (end > endOfLine)
 					{
-						std::cout << "EC test loop 3" << std::endl;
 						tempBuf = new char[end - endOfLine];
 						memcpy(tempBuf, &buf[start], end - endOfLine);
-						std::cout << tempBuf << std::endl;
 						data[row * nC + col] = std::stof(tempBuf);
-						sizeTracker++;
 						delete[] tempBuf;
 						col++;
-						std::cout << "Size of Matrix: " << sizeTracker << ". Matrix element " << row << " " << col-1 << " is " << data[sizeTracker -1] << std::endl;
-						std::cout << "End of Line detected. Filling rest of row with zeros" << std::endl;
 						for (int i = col; i < nC; ++i)
 						{
 							data[row * nR + i] = 0.0;
@@ -247,17 +204,13 @@
 					end = findPos(' ', tempBuf2, 0, endOfBufferSz);
 					while (col < nC && end != -1)
 					{
-						std::cout << "EC loop 2-1" << std::endl;
-						std::cout << end << std::endl;
 						tempBuf = new char[endOfBufferSz];
 						memcpy(tempBuf, &tempBuf2[start], end - start);
-						data[row * nR + col] = std::stof(tempBuf2);
+						data[row * nR + col] = std::stof(tempBuf);
 						delete[] tempBuf;
 						col++;
-						sizeTracker++;
-						std::cout << "Size of Matrix: " << sizeTracker << ". Matrix element " << row << " " << col-1 << " is " << data[sizeTracker -1] << std::endl;
 						start = end + 1;
-						end = findPos(' ', tempBuf2, end, bytesRead);
+						end = findPos(' ', tempBuf2, start, endOfBufferSz);
 					}
 					tempBuf = new char[endOfBufferSz - start];
 					memcpy(tempBuf, &tempBuf2[start], endOfBufferSz - start);
@@ -458,6 +411,30 @@
 			// should throw an error here. Class is not set up, so for now returns empty matrix.
 			return Matrix();
 		}
+	}
+
+
+	// Matrix Matrix::operator*(Matrix& rval)
+	// {
+	// 	if (Mcheck(rval))
+	// 	{
+	// 		//
+	// 	}
+	// 	else
+	// 	{
+	// 		std::cout << "Matrices cannot be multiplied. Dimensions do not match up." << std::endl;
+	// 		return Matrix();
+	// 	}
+	// }
+
+
+	Matrix Matrix::operator*(double rval)
+	{
+		for (int i = 0; i < nC * nR; ++i)
+		{
+			this->data[i] *= rval;
+		}
+		return *this;
 	}
 
 	void Matrix::printMatrix()

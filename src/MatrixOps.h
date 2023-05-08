@@ -17,6 +17,7 @@ private:
 	int nR = 0;		// Number of Rows
 	double * data;		// Matrix Data
 
+
 public:
 	Matrix();
 	Matrix(std::string fileName);
@@ -31,7 +32,8 @@ public:
 	bool operator==(Matrix& rval);
 	Matrix operator+(Matrix& rval);
 	Matrix operator-(Matrix& rval);
-	Matrix operator*(Matrix& rval);
+	// Matrix operator*(Matrix& rval);
+	Matrix operator*(double rval);
 	void printMatrix();
 };
 
